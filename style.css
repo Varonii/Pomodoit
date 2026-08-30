@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #852d29e1;
+    color: white;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+nav {
+    width: 620px; 
+    padding: 12px 0;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Grupo de botões da direita */
+.nav-btns {
+    display: flex;
+    gap: 10px;
+}
+
+/* Estilo dos botões da navbar */
+.nav-btn {
+    background-color: rgba(255, 255, 255, 0.2); /* Fundo semitransparente */
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #ae5c5cd5;
+    width: 480px;
+    height: 350px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btns {
+    display: flex;
+    gap: 10px;
+}
+
+.btns button {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.btns button:hover {
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+.time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.time h1 {
+    font-size: 9rem;
+    font-weight: bold;
+}
+
+.start-btn {
+    background-color: white;
+    color: #81381F;
+    border: none;
+    padding: 12px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.start-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.start-btn:active {
+    transform: translateY(2px);
+}
+
+.tasks {
+    margin-top: 30px;
+    width: 480px; /* Mantém a mesma largura do timer */
+    text-align: center;
+}
+
+.tasks-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-top: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.6); /* Linha abaixo de Tasks */
+}
+
+.tasks-menu p {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.add-task-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 18px;
+    background-color: rgba(0, 0, 0, 0.15); /* Fundo sutilmente escuro */
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    font-weight: bold;
+    border: 2px dashed rgba(255, 255, 255, 0.4); /* Borda tracejada */
+    border-radius: 7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.add-task-btn:hover {
+    background-color: rgba(0, 0, 0, 0.048);
+    border-color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.703);
+}
+
+.add-task-btn span {
+    font-size: 1.2rem;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+footer a {
+    text-decoration: none;
+    color: white;
+    opacity: 0.8;
+}
+
+footer a:hover {
+    opacity: 1;
+}
