@@ -11,6 +11,23 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    transition: background-color 0.5s ease;
+}
+
+body.short-mode {
+    background-color: #4c9195;
+}
+
+body.short-mode .timer {
+    background-color: #63b4b8;
+}
+
+body.long-mode {
+    background-color: #457ca3;
+}
+
+body.long-mode .timer {
+    background-color: #5c93bb;
 }
 
 header {
@@ -20,10 +37,11 @@ header {
 }
 
 nav {
-    width: 620px; 
+    width: 90%;
+    max-width: 620px;
     padding: 12px 0;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -38,15 +56,13 @@ nav {
     gap: 6px;
 }
 
-/* Grupo de botões da direita */
 .nav-btns {
     display: flex;
     gap: 10px;
 }
 
-/* Estilo dos botões da navbar */
 .nav-btn {
-    background-color: rgba(255, 255, 255, 0.2); /* Fundo semitransparente */
+    background-color: rgba(255, 255, 255, 0.2);
     border: none;
     color: white;
     padding: 6px 12px;
@@ -74,10 +90,12 @@ main {
     align-items: center;
     justify-content: space-evenly;
     background-color: #ae5c5cd5;
-    width: 480px;
+    width: 90%;
+    max-width: 480px;
     height: 350px;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.5s ease;
 }
 
 .btns {
@@ -101,6 +119,14 @@ main {
     background-color: rgba(255, 255, 255, 0.07);
 }
 
+.pomodoro-btn.active,
+.short-btn.active,
+.long-btn.active {
+    background-color: rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    border-radius: 4px;
+}
+
 .time {
     display: flex;
     flex-direction: column;
@@ -117,26 +143,36 @@ main {
     background-color: white;
     color: #81381F;
     border: none;
-    padding: 12px 40px;
-    font-size: 1.2rem;
+    padding: 14px 45px;
+    font-size: 1.3rem;
     font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
     text-transform: uppercase;
-    transition: transform 0.1s ease, background-color 0.2s ease;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 6px 0 #d1d1d1;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
 }
 
 .start-btn:hover {
     background-color: #f0f0f0;
 }
 
-.start-btn:active {
-    transform: translateY(2px);
+.start-btn.pressed {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #d1d1d1;
+    background-color: #e6e6e6;
+}
+
+.start-btn.pressed:hover {
+    background-color: #d9d9d9;
 }
 
 .tasks {
     margin-top: 30px;
-    width: 480px; /* Mantém a mesma largura do timer */
+    width: 90%;
+    max-width: 480px;
     text-align: center;
 }
 
@@ -146,7 +182,7 @@ main {
     align-items: center;
     padding-bottom: 10px;
     margin-top: 15px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.6); /* Linha abaixo de Tasks */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.6);
 }
 
 .tasks-menu p {
@@ -158,11 +194,11 @@ main {
     width: 100%;
     margin-top: 15px;
     padding: 18px;
-    background-color: rgba(0, 0, 0, 0.15); /* Fundo sutilmente escuro */
+    background-color: rgba(0, 0, 0, 0.15);
     color: rgba(255, 255, 255, 0.5);
     font-size: 1rem;
     font-weight: bold;
-    border: 2px dashed rgba(255, 255, 255, 0.4); /* Borda tracejada */
+    border: 2px dashed rgba(255, 255, 255, 0.4);
     border-radius: 7px;
     cursor: pointer;
     display: flex;
@@ -196,4 +232,15 @@ footer a {
 
 footer a:hover {
     opacity: 1;
+}
+
+@media (max-width: 500px) {
+    .time h1 {
+        font-size: 5.5rem;
+    }
+
+    .btns button {
+        font-size: 0.85rem;
+        padding: 6px 8px;
+    }
 }
