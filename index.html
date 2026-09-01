@@ -37,13 +37,24 @@
                 <button class="start-btn">Start</button>
             </div>
         </section>
+
         <section class="tasks">
             <p class="task-text">Time to focus!</p>
+            
             <div class="tasks-menu">
                 <p>Tasks</p>
             </div>
-            
-            <!-- Botão de adicionar tarefa -->
+
+            <div class="tasks-list"></div>
+
+            <div class="add-task-form hidden">
+                <input type="text" id="task-input" placeholder="What are you working on?" autocomplete="off">
+                <div class="form-btns">
+                    <button type="button" class="cancel-btn">Cancel</button>
+                    <button type="button" class="save-btn">Save</button>
+                </div>
+            </div>
+
             <button class="add-task-btn">
                 <span>+</span> Add Task
             </button>

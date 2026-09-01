@@ -218,6 +218,160 @@ main {
     font-size: 1.2rem;
 }
 
+.tasks-list {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task-item {
+    background-color: white;
+    color: #222;
+    padding: 18px 20px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    font-size: 1rem;
+    border-left: 6px solid #222;
+    transition: all 0.2s ease;
+}
+
+.task-item.completed {
+    border-left: 6px solid transparent;
+}
+
+.task-item.completed span {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+.task-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.task-info input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #dfdfdf;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.task-info input[type="checkbox"]:checked {
+    background-color: #a43531;
+}
+
+.task-info input[type="checkbox"]:checked::after {
+    content: "✓";
+    color: white;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.delete-task-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.delete-task-btn:hover {
+    color: #222;
+    background-color: #f0f0f0;
+}
+
+.add-task-form {
+    background-color: white;
+    border-radius: 8px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.add-task-form.hidden,
+.add-task-btn.hidden {
+    display: none;
+}
+
+.add-task-form input {
+    border: none;
+    outline: none;
+    font-size: 1.3rem;
+    font-style: italic;
+    font-weight: bold;
+    padding: 24px 20px;
+    color: #555;
+    background-color: transparent;
+}
+
+.add-task-form input::placeholder {
+    color: #ccc;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.form-btns {
+    background-color: #efefef;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}
+
+.cancel-btn {
+    background: transparent;
+    color: #888;
+    border: none;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 8px 12px;
+    transition: color 0.2s ease;
+}
+
+.cancel-btn:hover {
+    color: #444;
+}
+
+.save-btn {
+    background-color: #363636;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease;
+}
+
+.save-btn:hover {
+    background-color: #1e1e1e;
+}
+
 footer {
     display: flex;
     justify-content: center;

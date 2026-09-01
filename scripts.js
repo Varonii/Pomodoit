@@ -4,6 +4,12 @@ const pomodoroBtn = document.querySelector(".pomodoro-btn");
 const shortBreakBtn = document.querySelector(".short-btn");
 const longBreakBtn = document.querySelector(".long-btn");
 const taskText = document.querySelector(".task-text");
+const addTaskBtn = document.querySelector(".add-task-btn");
+const addTaskForm = document.querySelector(".add-task-form");
+const cancelBtn = document.querySelector(".cancel-btn");
+const saveBtn = document.querySelector(".save-btn");
+const taskInput = document.querySelector("#task-input");
+const taskList = document.querySelector(".tasks-list");
 const alarmSounds = {
     bell: new Audio('./sounds/Bell-ring.mp3'),
     digital: new Audio('./sounds/Digital-alarm.mp3'),
@@ -11,11 +17,13 @@ const alarmSounds = {
     piano: new Audio('./sounds/Piano-ringtone.mp3'),
     soft: new Audio('./sounds/Soft-ringtone.mp3')
 };
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let currentSound = alarmSounds.piano;
 let currentMode = "pomodoro";
 let timeSec = 1500;
 let timerInterval = null;
 let isRunning = false;
+let endTime = null;
 
 //Função para mostrar o tempo no formato mm:ss
 function showTime() {
@@ -29,17 +37,22 @@ function showTime() {
     document.title = `${formattedTime} - ${taskText ? taskText.textContent : 'Pomodoro'}`;
 }
 
-//Funcão para iniciar e pausar o timer
 function startTimer() {
     if (!isRunning) {
         isRunning = true;
         startBtn.textContent = "pause";
         startBtn.classList.add("pressed");
+        endTime = Date.now() + (timeSec * 1000);
+
         timerInterval = setInterval(() => {
+            const remainingMs = endTime - Date.now();
+            timeSec = Math.ceil(remainingMs / 1000);
+
             if (timeSec > 0) {
-                timeSec --;
                 showTime();
             } else {
+                timeSec = 0;
+                showTime();
                 clearInterval(timerInterval);
                 isRunning = false;
                 startBtn.textContent = "start";
@@ -132,3 +145,84 @@ function setActiveButton(clickedBtn) {
     clickedBtn.classList.add("active");
 }
 pomodoroBtn.classList.add("active");
+
+addTaskBtn.addEventListener("click", () => {
+    addTaskForm.classList.remove("hidden");
+    addTaskBtn.classList.add("hidden");
+    taskInput.focus();
+})
+
+cancelBtn.addEventListener("click", () => {
+    addTaskForm.classList.add("hidden");
+    addTaskBtn.classList.remove("hidden");
+    taskInput.value = "";
+})
+
+saveBtn.addEventListener("click", createNewTask);
+
+function createNewTask() {
+    let taskContent = taskInput.value.trim();
+    if (taskContent !== "") {
+        const newTask = {
+            id: Date.now(),
+            text: taskContent,
+            completed: false
+        }
+        tasks.push(newTask);
+        renderTasks();
+        addTaskForm.classList.add("hidden");
+        addTaskBtn.classList.remove("hidden");
+        taskInput.value = "";
+    } else {
+
+    }
+}
+
+function renderTasks() {
+    taskList.innerHTML = "";
+
+    tasks.forEach(task => {
+        const taskItem = document.createElement("div");
+        taskItem.classList.add("task-item");
+
+        taskItem.innerHTML = `
+            <div class="task-info">
+                <input type="checkbox" ${task.completed ? "checked" : ""}>
+                <span>${task.text}</span>
+            </div>
+            <button class="delete-task-btn">✕</button>
+        `;
+        if(task.completed) {
+            taskItem.classList.add("completed");
+        };
+
+        taskItem.querySelector(".task-info").addEventListener("click", () => {
+            toggleTask(task.id);
+        });
+
+        taskItem.querySelector(".delete-task-btn").addEventListener("click", (e) => {
+            e.stopPropagation();
+            deleteTask(task.id);
+        });
+        taskList.appendChild(taskItem);
+    });
+    saveTask();
+}
+
+function toggleTask(id) {
+    tasks.forEach(task => {
+        if (task.id === id) {
+            task.completed = !task.completed;
+        }
+    });
+    renderTasks();
+}
+
+function deleteTask(id) {
+    tasks = tasks.filter(task => task.id !== id);
+    renderTasks();
+}
+
+function saveTask() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
