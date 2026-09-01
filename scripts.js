@@ -4,6 +4,15 @@ const pomodoroBtn = document.querySelector(".pomodoro-btn");
 const shortBreakBtn = document.querySelector(".short-btn");
 const longBreakBtn = document.querySelector(".long-btn");
 const taskText = document.querySelector(".task-text");
+const alarmSounds = {
+    bell: new Audio('./sounds/Bell-ring.mp3'),
+    digital: new Audio('./sounds/Digital-alarm.mp3'),
+    fastBell: new Audio('./sounds/Fast-bell-ring.mp3'),
+    piano: new Audio('./sounds/Piano-ringtone.mp3'),
+    soft: new Audio('./sounds/Soft-ringtone.mp3')
+};
+let currentSound = alarmSounds.piano;
+let currentMode = "pomodoro";
 let timeSec = 1500;
 let timerInterval = null;
 let isRunning = false;
@@ -35,17 +44,36 @@ function startTimer() {
                 isRunning = false;
                 startBtn.textContent = "start";
                 startBtn.classList.remove("pressed");
+                playAlarm();
+                handleNextMode();
             }
         }, 1000);
 
     } else {
-        isRunning = false;
         clearInterval(timerInterval);
+        isRunning = false;
         startBtn.textContent = "start";
         startBtn.classList.remove("pressed");
     }
 }
 startBtn.addEventListener("click", startTimer);
+
+currentSound.volume = 0.6;
+function playAlarm() {
+    currentSound.currentTime = 0;
+    currentSound.play();
+}
+
+function handleNextMode() {
+    if (currentMode === "pomodoro") {
+        setTimerMode(300, "short-mode", shortBreakBtn, "short");
+        startTimer(); // Inicia o tempo de pausa automaticamente
+    } else if (currentMode === "short") {
+        setTimerMode(1500, "", pomodoroBtn, "pomodoro");
+    } else {
+        setTimerMode(1500, "", pomodoroBtn, "pomodoro");
+    }
+}
 
 // function setPomodoro() {
 //     clearInterval(timerInterval);
@@ -74,11 +102,12 @@ startBtn.addEventListener("click", startTimer);
 // }
 // longBreakBtn.addEventListener("click", setLongBreak);
 
-function setTimerMode(seconds, modeClass, clickedBtn) {
+function setTimerMode(seconds, modeClass, clickedBtn, mode) {
     clearInterval(timerInterval);
     isRunning = false;
     startBtn.textContent = "start";
     timeSec = seconds;
+    currentMode = mode;
     showTime();
     document.body.classList.remove("short-mode", "long-mode");
     if (modeClass) {
@@ -92,9 +121,9 @@ function setTimerMode(seconds, modeClass, clickedBtn) {
     }
     showTime();
 }
-pomodoroBtn.addEventListener("click", () => setTimerMode(1500, "", pomodoroBtn));
-shortBreakBtn.addEventListener("click", () => setTimerMode(300, "short-mode", shortBreakBtn));
-longBreakBtn.addEventListener("click", () => setTimerMode(900, "long-mode", longBreakBtn));
+pomodoroBtn.addEventListener("click", () => setTimerMode(1500, "", pomodoroBtn, "pomodoro"));
+shortBreakBtn.addEventListener("click", () => setTimerMode(300, "short-mode", shortBreakBtn, "short"));
+longBreakBtn.addEventListener("click", () => setTimerMode(900, "long-mode", longBreakBtn, "long"));
 
 function setActiveButton(clickedBtn) {
     pomodoroBtn.classList.remove("active");
