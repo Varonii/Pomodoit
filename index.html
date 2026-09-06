@@ -11,11 +11,11 @@
     <header>
         <nav>
             <a href="index.html" class="logo">
-                <span>✔</span> Pomodoro
+                <span>✔</span> PomodoIT
             </a>
             
             <div class="nav-btns">
-                <button class="nav-btn">Settings</button>
+                <button class="nav-btn settings-btn">Settings</button>
             </div>
         </nav>
     </header>
@@ -63,5 +63,46 @@
     <footer>
         <a href="https://github.com/Varonii">Github</a>
     </footer>
+
+<div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Settings</h2>
+            <button class="close-modal-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="setting-group">
+                <label>Time (minutes)</label>
+                <div class="inputs-row">
+                    <div>
+                        <label>Pomodoro</label>
+                        <input type="number" id="pomodoro-time" min="1" max="90">
+                    </div>
+                    <div>
+                        <label>Short Break</label>
+                        <input type="number" id="short-time" min="1" max="30">
+                    </div>
+                    <div>
+                        <label>Long Break</label>
+                        <input type="number" id="long-time" min="1" max="45">
+                    </div>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label for="sound-select">Alarm Sound</label>
+                <select id="sound-select">
+                    <option value="piano">Piano</option>
+                    <option value="bell">Bell</option>
+                    <option value="digital">Digital</option>
+                    <option value="fastBell">Fast Bell</option>
+                    <option value="soft">Soft</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="save-settings-btn">Save</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
