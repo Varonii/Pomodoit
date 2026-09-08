@@ -78,9 +78,15 @@ modalOverlay.addEventListener("click", (e) => {
 });
 
 saveSettingsBtn.addEventListener("click", () => {
-    settings.pomodoro = parseInt(pomodoroInput.value) || 25;
-    settings.short = parseInt(shortInput.value) || 5;
-    settings.long = parseInt(longInput.value) || 15;
+    const clamp = (val, min, max, fallback) => {
+        let num = parseFloat(val);
+        if (isNaN(num)) return fallback;
+        return Math.min(Math.max(num, min), max);
+    };
+
+    settings.pomodoro = clamp(pomodoroInput.value, 1, 90, 25);
+    settings.short = clamp(shortInput.value, 1, 30, 5);
+    settings.long = clamp(longInput.value, 1, 45, 15);
     settings.sound = soundSelect.value;
 
     localStorage.setItem("pomodoroSettings", JSON.stringify(settings));
