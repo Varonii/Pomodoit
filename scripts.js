@@ -97,17 +97,56 @@ saveSettingsBtn.addEventListener("click", () => {
 function handleNextMode() {
     if (currentMode === "pomodoro") {
         if (activeTaskId) {
-            const activeTask = tasks.find(t => t.id === activeTaskId);
+            const activeTask = tasks.find(task => task.id === activeTaskId);
+            
             if (activeTask) {
-                activeTask.actPomodoros = (activeTask.actPomodoros || 0) + 1;
+                activeTask.actPomodoros =
+                    (activeTask.actPomodoros || 0) + 1;
             }
         }
-        sendNotification("Pomodoro Concluído! 🎉", "Hora de fazer uma pausa.");
-        setTimerMode(settings.short * 60, "short-mode", shortBreakBtn, "short");
+
+        completedPomodoros++;
+
+        if (completedPomodoros % 3 === 0) {
+            sendNotification(
+                "Pomodoro concluído!",
+                "Você completou 4 sessões. Hora de uma pausa longa!"
+            );
+
+            setTimerMode(
+                settings.long * 60,
+                "long-mode",
+                longBreakBtn,
+                "long"
+            );
+        } else {
+            sendNotification(
+                "Pomodoro concluído!",
+                "Hora de fazer uma pausa curta."
+            );
+
+            setTimerMode(
+                settings.short * 60,
+                "short-mode",
+                shortBreakBtn,
+                "short"
+            );
+        }
+
         startTimer();
+
     } else {
-        sendNotification("Pausa Finalizada! ⚡", "Hora de focar novamente!");
-        setTimerMode(settings.pomodoro * 60, "", pomodoroBtn, "pomodoro");
+        sendNotification(
+            "Pausa finalizada!",
+            "Hora de focar novamente!"
+        );
+
+        setTimerMode(
+            settings.pomodoro * 60,
+            "",
+            pomodoroBtn,
+            "Pomodoro"
+        );
     }
     renderTasks();
 }
@@ -166,44 +205,30 @@ function playAlarm() {
     currentSound.play();
 }
 
-function handleNextMode() {
-    if (currentMode === "pomodoro") {
-        if (activeTaskId) {
-            const activeTask = tasks.find(t => t.id === activeTaskId);
-            if (activeTask) {
-                activeTask.actPomodoros = (activeTask.actPomodoros || 0) + 1;
-            }
-        }
-        
-        sendNotification("Pomodoro Concluído!", "Hora de fazer uma pausa.");
-        setTimerMode(300, "short-mode", shortBreakBtn, "short");
-        startTimer();
-    } else {
-        sendNotification("Pausa Finalizada!", "Hora de focar novamente!");
-        setTimerMode(1500, "", pomodoroBtn, "pomodoro");
-    }
-    renderTasks();
-}
-
 function setTimerMode(seconds, modeClass, clickedBtn, mode) {
     clearInterval(timerInterval);
     isRunning = false;
+
     startBtn.textContent = "start";
+    startBtn.classList.remove("pressed");
+
     timeSec = seconds;
     currentMode = mode;
-    showTime();
-    
+
     document.body.classList.remove("short-mode", "long-mode");
+
     if (modeClass) {
         document.body.classList.add(modeClass);
     }
-    
+
     setActiveButton(clickedBtn);
-    if (clickedBtn === shortBreakBtn || clickedBtn === longBreakBtn) {
+
+    if (mode === "short" || mode === "long") {
         taskText.textContent = "Time for a break!";
     } else {
         updateActiveTaskDisplay();
     }
+
     showTime();
 }
 
@@ -278,28 +303,45 @@ function renderTasks() {
             taskItem.classList.add("completed");
         }
 
-        taskItem.innerHTML = `
-            <div class="task-info">
-                <input type="checkbox" ${task.completed ? "checked" : ""}>
-                <span>${task.text}</span>
-            </div>
-            <div class="task-right">
-                <span class="pomodoro-count">${task.actPomodoros || 0}</span>
-                <button class="delete-task-btn">✕</button>
-            </div>
-        `;
+        const taskInfo = document.createElement("div");
+        taskInfo.classList.add("task-info");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.completed;
+
+        const taskName = document.createElement("span");
+        taskName.textContent = task.text;
+
+        taskInfo.appendChild(checkbox);
+        taskInfo.appendChild(taskName);
+
+        const taskRight = document.createElement("div");
+        taskRight.classList.add("task-right");
+
+        const pomodoroCount = document.createElement("span");
+        pomodoroCount.classList.add("pomodoro-count");
+        pomodoroCount.textContent = task.actPomodoros || 0;
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.classList.add("delete-task-btn");
+        deleteBtn.textContent = "✕";
+
+        taskRight.appendChild(pomodoroCount);
+        taskRight.appendChild(deleteBtn);
+
+        taskItem.appendChild(taskInfo);
+        taskItem.appendChild(taskRight);
 
         taskItem.addEventListener("click", () => {
             selectActiveTask(task.id);
         });
 
-        const checkbox = taskItem.querySelector('input[type="checkbox"]');
         checkbox.addEventListener("click", (e) => {
             e.stopPropagation();
             toggleTask(task.id);
         });
 
-        const deleteBtn = taskItem.querySelector(".delete-task-btn");
         deleteBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             deleteTask(task.id);
