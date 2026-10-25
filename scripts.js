@@ -27,19 +27,33 @@ const alarmSounds = {
     piano: new Audio('./sounds/Piano-ringtone.mp3'),
     soft: new Audio('./sounds/Soft-ringtone.mp3')
 };
-let settings = JSON.parse(localStorage.getItem("pomodoroSettings")) || {
+
+function loadStorage(key, fallback) {
+    try {
+        const value = JSON.parse(localStorage.getItem(key));
+        return value ?? fallback;
+    } catch {
+        return fallback;
+    }
+}
+
+let settings = {
     pomodoro: 25,
     short: 5,
     long: 15,
-    sound: "piano"
+    sound: "piano",
+    ...loadStorage("pomodoroSettings", {})
 };
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+const storedTasks = loadStorage("tasks", []);
+let tasks = Array.isArray(storedTasks) ? storedTasks : [];
+
 let currentSound = alarmSounds.piano;
 let currentMode = "pomodoro";
 let timeSec = 1500;
 let timerInterval = null;
 let isRunning = false;
 let endTime = null;
+let completedPomodoros = 0;
 let activeTaskId = tasks.length > 0 ? tasks[0].id : null;
 
 function selectActiveTask(id) {
@@ -54,14 +68,18 @@ function updateActiveTaskDisplay() {
     }
 }
 
-function applySettings() {
-    currentSound = alarmSounds[settings.sound] || alarmSounds.piano;
-    currentSound.volume = 0.6;
-
+function fillSettingsInputs() {
     pomodoroInput.value = settings.pomodoro;
     shortInput.value = settings.short;
     longInput.value = settings.long;
     soundSelect.value = settings.sound;
+}
+
+function applySettings() {
+    currentSound = alarmSounds[settings.sound] || alarmSounds.piano;
+    currentSound.volume = 0.6;
+
+    fillSettingsInputs();
 
     if (!isRunning) {
         if (currentMode === "pomodoro") timeSec = settings.pomodoro * 60;
@@ -71,7 +89,10 @@ function applySettings() {
     }
 }
 
-settingsBtn.addEventListener("click", () => modalOverlay.classList.remove("hidden"));
+settingsBtn.addEventListener("click", () => {
+    fillSettingsInputs();
+    modalOverlay.classList.remove("hidden");
+});
 closeModalBtn.addEventListener("click", () => modalOverlay.classList.add("hidden"));
 modalOverlay.addEventListener("click", (e) => {
     if (e.target === modalOverlay) modalOverlay.classList.add("hidden");
@@ -79,7 +100,7 @@ modalOverlay.addEventListener("click", (e) => {
 
 saveSettingsBtn.addEventListener("click", () => {
     const clamp = (val, min, max, fallback) => {
-        let num = parseFloat(val);
+        let num = parseInt(val, 10);
         if (isNaN(num)) return fallback;
         return Math.min(Math.max(num, min), max);
     };
@@ -98,7 +119,7 @@ function handleNextMode() {
     if (currentMode === "pomodoro") {
         if (activeTaskId) {
             const activeTask = tasks.find(task => task.id === activeTaskId);
-            
+
             if (activeTask) {
                 activeTask.actPomodoros =
                     (activeTask.actPomodoros || 0) + 1;
@@ -107,7 +128,7 @@ function handleNextMode() {
 
         completedPomodoros++;
 
-        if (completedPomodoros % 3 === 0) {
+        if (completedPomodoros % 2 === 0) {
             sendNotification(
                 "Pomodoro concluído!",
                 "Você completou 4 sessões. Hora de uma pausa longa!"
@@ -145,7 +166,7 @@ function handleNextMode() {
             settings.pomodoro * 60,
             "",
             pomodoroBtn,
-            "Pomodoro"
+            "pomodoro"
         );
     }
     renderTasks();
@@ -159,7 +180,7 @@ function showTime() {
     const minutesFormatted = String(minutes).padStart(2, '0');
     const secondsFormatted = String(seconds).padStart(2, '0');
     const formattedTime = `${minutesFormatted}:${secondsFormatted}`;
-    
+
     timer.textContent = formattedTime;
     document.title = `${formattedTime} - ${taskText ? taskText.textContent : 'Pomodoro'}`;
 }
@@ -199,10 +220,9 @@ function startTimer() {
 }
 startBtn.addEventListener("click", startTimer);
 
-currentSound.volume = 0.6;
 function playAlarm() {
     currentSound.currentTime = 0;
-    currentSound.play();
+    currentSound.play().catch(err => console.warn("Não foi possível tocar o alarme:", err));
 }
 
 function setTimerMode(seconds, modeClass, clickedBtn, mode) {
@@ -274,9 +294,9 @@ function createNewTask() {
             completed: false,
             actPomodoros: 0
         };
-        
+
         tasks.push(newTask);
-        
+
         if (!activeTaskId) {
             activeTaskId = newTask.id;
         }

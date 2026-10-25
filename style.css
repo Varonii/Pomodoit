@@ -1,4 +1,3 @@
-/* --- RESET E BASE --- */
 * {
     margin: 0;
     padding: 0;
@@ -6,6 +5,7 @@
 }
 
 body {
+    --accent: #852d29;
     background-color: #852d29;
     color: #ffffff;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -16,8 +16,8 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Temas de Cor por Modo */
 body.short-mode {
+    --accent: #4c9195;
     background-color: #4c9195;
 }
 
@@ -26,6 +26,7 @@ body.short-mode .timer {
 }
 
 body.long-mode {
+    --accent: #457ca3;
     background-color: #457ca3;
 }
 
@@ -33,7 +34,6 @@ body.long-mode .timer {
     background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* --- HEADER & NAV --- */
 header {
     width: 100%;
     display: flex;
@@ -88,7 +88,6 @@ nav {
     transform: translateY(0);
 }
 
-/* --- MAIN & TIMER --- */
 main {
     flex: 1;
     display: flex;
@@ -160,7 +159,7 @@ main {
 
 .start-btn {
     background-color: #ffffff;
-    color: #852d29;
+    color: var(--accent);
     border: none;
     padding: 14px 0;
     font-size: 1.25rem;
@@ -238,7 +237,6 @@ main {
     gap: 10px;
 }
 
-/* Item de Tarefa (Consolidado e Sem Duplicidade) */
 .task-item {
     background-color: #ffffff;
     color: #222222;
@@ -252,7 +250,7 @@ main {
     font-size: 0.95rem;
     border-left: 6px solid transparent;
     cursor: pointer;
-    transition: transform 0.15 ease, box-shadow 0.15s ease, border-color 0.2s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease;
 }
 
 .task-item:hover {
@@ -297,7 +295,7 @@ main {
 }
 
 .task-info input[type="checkbox"]:checked {
-    background-color: #852d29;
+    background-color: var(--accent);
 }
 
 .task-info input[type="checkbox"]:checked::after {
@@ -338,7 +336,6 @@ main {
     background-color: #fee2e2;
 }
 
-/* --- FORMULÁRIO DE NOVA TAREFA --- */
 .add-task-form {
     background-color: #ffffff;
     border-radius: 8px;
@@ -414,7 +411,6 @@ main {
     background-color: #000000;
 }
 
-/* --- MODAL DE CONFIGURAÇÕES --- */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -544,7 +540,6 @@ main {
     background-color: #000000;
 }
 
-/* --- FOOTER --- */
 footer {
     display: flex;
     justify-content: center;
@@ -564,7 +559,6 @@ footer a:hover {
     opacity: 1;
 }
 
-/* --- ANIMAÇÕES E RESPONSIVIDADE --- */
 @keyframes fadeIn {
     from {
         opacity: 0;
